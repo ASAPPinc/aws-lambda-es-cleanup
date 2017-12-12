@@ -12,7 +12,7 @@ resource "aws_lambda_function" "es_cleanup" {
     role             = "${aws_iam_role.role.arn}"
     handler          = "es-cleanup.lambda_handler"
     source_code_hash = "${data.archive_file.es_cleanup_lambda.output_base64sha256}"
-    timeout = 20
+    timeout          = 20
 
     environment {
         variables = {
@@ -25,7 +25,7 @@ resource "aws_lambda_function" "es_cleanup" {
     }
 
     vpc_config {
-        subnet_ids = ["${var.subnets_ids_list}"]
+        subnet_ids         = ["${var.subnets_ids_list}"]
         security_group_ids = ["${var.security_group_ids_list}"]
     }
 }
