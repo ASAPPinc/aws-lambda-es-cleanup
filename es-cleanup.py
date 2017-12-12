@@ -161,6 +161,7 @@ def lambda_handler(event, context):
     # Index cutoff definition, remove older than this date
     earliest_to_keep = datetime.date.today() - datetime.timedelta(
         days=int(es.cfg["delete_after"]))
+    n_deleted_indexes = 0
     for index in es.get_indices():
 
         if index["index"] == ".kibana":
@@ -175,6 +176,10 @@ def lambda_handler(event, context):
             if idx_date <= earliest_to_keep.strftime(es.cfg["index_format"]):
                 print("Deleting index: %s" % index["index"])
                 es.delete_index(index["index"])
+                n_deleted_indexes = n_deleted_indexes + 1
+
+    if n_deleted_indexes == 0:
+        print("Not indexes to be deleted.")
 
 
 if __name__ == '__main__':
